@@ -1,4 +1,3 @@
-const soilType = document.getElementById("soil").value; // Вид ЩГПС
 const quantityOfSamples = document.getElementById("quantity").value; // Количнство требуемых рассевов
 
 // Получаем каждую ячейку рассева
@@ -25,13 +24,57 @@ function getRandomValue(min, max) { // Возвращает случайное �
     return minMultiple + Math.floor(Math.random() * count) * 5;
 }
 
-// 1. Задаём рандомное число
-// 2. Проверяем какая у нас ЩГПС
-// 3. Парсим значения из вставленного рассева
+function admission() { // Выдаёт массив с допусками по грунтам
+    const soilType = document.getElementById("soil").value;
+    if (soilType === "c1") {
+        return [0, 0, 0, 10, 20, 40, 35, 60, 45, 70, 75, 92, 80, 93]
+    }
+    else if (soilType === "c2") {
+        return [0, 0, 0, 0, 0, 10, 10, 35, 25, 50, 35, 65, 55, 80, 65, 90, 75, 92]
+    }
+    else if (soilType === "c4") {
+        return [0, 10, 15, 35, 28, 55, 40, 70, 50, 80, 60, 85, 80, 95, 91, 97, 95, 100]
+    }
+    else if (soilType === "c5") {
+        return [0, 0, 0, 10, 25, 60, 45, 80, 57, 85, 67, 88, 80, 95, 90, 97, 95, 100]
+    }
+    else if (soilType === "c10") {
+        return [0, 0, 0, 10, 25, 60, 45, 80, 57, 85, 71, 91, 87, 97, 95, 100]
+    }
+}
+function getWeight() {
+    const value1 = document.getElementById("value1").value;
+    const value2 = document.getElementById("value2").value;
+    const value3 = document.getElementById("value3").value;
+    const value4 = document.getElementById("value4").value;
+    const value5 = document.getElementById("value5").value;
+    const value6 = document.getElementById("value6").value;
+    const value7 = document.getElementById("value7").value;
+    const value8 = document.getElementById("value8").value;
+    const value9 = document.getElementById("value9").value;
+    const value10 = document.getElementById("value10").value;
+    const value11 = document.getElementById("value11").value;
+    return [value1, value2, value3, value4, value5, value6, value7, value8, value9, value10, value11]
+}
+
+function getSample() {
+    
+}
+
+
+// 1. Задаём рандомное число +
+// 2. Задать список допустимых значений по гост +
+// 2. Проверяем какая у нас ЩГПС 
+// 3. Парсим значения из вставленного рассева 
 // 4. Определяем диапазон на сколько можно прибавлять или убавлять для каждой ячейки
 // 5. Прибавляем к каждой ячейке число кратное 5
 // 6. Проверка суммы полученного значения
 // 7. Выдаём требуемое количнство рассевов
+
+function check() {
+    console.log(admission());
+    console.log(getWeight());
+}
 
 
 
