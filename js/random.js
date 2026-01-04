@@ -45,13 +45,9 @@ function calculatePP(weight) { // Расчёт ПП
 }
 function calculatePO(PP) { // Расчёт ПО
     const PO = [];
-    for (let i = 0; i < 12; i++) {
-        if (i === 0) {
-            PO.push(PP[i]);
-        }
-        else {
-            PO.push(PP[i-1] + PP[i]);
-        }
+    PO.push(PP[0]);
+    for (let i = 1; i < PP.length; i++) {
+            PO.push(PO[i-1] + PP[i]);
     }
     return PO
 }
