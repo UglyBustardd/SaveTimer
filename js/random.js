@@ -53,27 +53,20 @@ function calculatePO(PP) { // Расчёт ПО
     return PO
 }
 function devation(min, max) { // Расчёт допустимого отклонения для придумывания рассева
-    const minValue = min;
-    const maxValue = max;
+    // const minValue = ;
+    // const maxValue = ;
 
-    const target = [];
-    const random = [];
+    const target = []; // Значение ПО для целевого рассева
+    const admissionMin = []; // Низ по допуску по ГОСТ
+    const admissionMax = []; // Верх по допуску по ГОСТ
 
     for (let i = 0; i < 12; i++) {
         target.push(calculatePO(calculatePP(getWeight()))[i])
     }
     for (let i = 0; i < 12; i++) {
-        random.push(admission()[i * 2]);
+        admissionMax.push(admission()[i]);
     }
-
-    // Проверка 
-    // const check = [];
-    // for (let i = 0; i < 12; i++) {
-    //     check.push(target[i]);
-    //     check.push(random[i]);
-    // }
-    // return check
-
-    // Расчитать допуски по ГОСТу и задать для каждой ячейки индивидуальное максимальное
-    //  и минимальное значение для отклонения
+    for (let i = 0; i < 12; i++) {
+        admissionMin.push(admission()[i * 2]);
+    }
 }
