@@ -22,19 +22,19 @@ function admission() { // Выдаёт допуски в ПО
     const soilType = document.getElementById("soil").value;
     // В список включены ячейки, которые не учитываются в ГОСТ`е (просто продублировал предыдущие)
     if (soilType === "c1") {
-        return [0, 0, 0, 10, 20, 40, 20, 40, 35, 60, 45, 70, 55, 80, 55, 80, 70, 90, 75, 92, 80, 93, 93, 100]
+        return [0, 0, 0, 10, 20, 40, 20, 40, 35, 60, 45, 70, 55, 80, 55, 80, 70, 90, 75, 92, 80, 93, 100, 100]
     }
     else if (soilType === "c2") {
-        return [0, 0, 0, 0, 0, 10, 0, 10, 10, 35, 25, 50, 35, 65, 35, 65, 55, 80, 65, 90, 75, 92, 92, 100]
+        return [0, 0, 0, 0, 0, 10, 0, 10, 10, 35, 25, 50, 35, 65, 35, 65, 55, 80, 65, 90, 75, 92, 100, 100]
     }
     else if (soilType === "c4") {
-        return [0, 10, 15, 35, 28, 55, 28, 55, 40, 70, 50, 80, 60, 85, 60, 85, 80, 95, 91, 97, 95, 100, 95, 100]
+        return [0, 10, 15, 35, 28, 55, 28, 55, 40, 70, 50, 80, 60, 85, 60, 85, 80, 95, 91, 97, 95, 100, 100, 100]
     }
     else if (soilType === "c5") {
-        return [0, 0, 0, 10, 25, 60, 25, 60, 45, 80, 57, 85, 67, 88, 67, 88, 80, 95, 90, 97, 95, 100, 95, 100]
+        return [0, 0, 0, 10, 25, 60, 25, 60, 45, 80, 57, 85, 67, 88, 67, 88, 80, 95, 90, 97, 95, 100, 100, 100]
     }
     else if (soilType === "c10") {
-        return [0, 0, 0, 10, 25, 60, 25, 60, 45, 80, 57, 85, 57, 85, 57, 85, 71, 91, 87, 97, 95, 100, 95, 100]
+        return [0, 0, 0, 10, 25, 60, 25, 60, 45, 80, 57, 85, 57, 85, 57, 85, 71, 91, 87, 97, 95, 100, 100, 100]
     }
 }
 function calculatePP(weight) { // Расчёт ПП
@@ -76,8 +76,17 @@ function calculateRandomSieve() {
 
     const sieve = []; // Значения ПО для рандомного рассева
     for (let i = 0; i < 12; i++) {
-        sieve.push(randomSieve(admissionMin[i], admissionMax[i]));
+        let minValue = admissionMin[i];
+        if (i > 0) {
+            minValue = Math.max(admissionMin[i], sieve[i - 1]);
+        }
+        if (minValue > admissionMax[i]) {
+            sieve.push(admissionMax[i]);
+        }
+        else {
+            sieve.push(randomSieve(minValue, admissionMax[i]))
+        }
+        // sieve.push(randomSieve(admissionMin[i], admissionMax[i]));
     }
-    
     return sieve
 }
