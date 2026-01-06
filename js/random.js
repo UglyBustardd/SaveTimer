@@ -58,32 +58,26 @@ function randomSieve(min, max) {
     return parseFloat(random.toFixed(2))
 }
 
-
-function devation(min, max) { // Расчёт допустимого отклонения для придумывания рассева
-    // const minValue = ;
-    // const maxValue = ;
-
+function calculateRandomSieve() { 
     const target = []; // Значение ПО целевого рассева
-    const admissionMin = []; // Низ по допуску по ГОСТ
-    const admissionMax = []; // Верх по допуску по ГОСТ
-    const sieve = []; // Значения ПО для рандомного рассева
-
     for (let i = 0; i < 12; i++) {
         target.push(calculatePO(calculatePP(getWeight()))[i])
     }
-    for (let i = 0; i < 12; i++) {
-        admissionMax.push(admission()[i * 2]);
+
+    const admissionMax = []; // Верх по допуску по ГОСТ
+    for (let i = 1; i < 24; i += 2) {
+        admissionMax.push(admission()[i]);
     }
-    for (let i = 0; i < 12; i++) {
+
+    const admissionMin = []; // Низ по допуску по ГОСТ
+    for (let i = 0; i < 24; i += 2) {
         admissionMin.push(admission()[i]);
     }
 
+    const sieve = []; // Значения ПО для рандомного рассева
     for (let i = 0; i < 12; i++) {
         sieve.push(randomSieve(admissionMin[i], admissionMax[i]));
     }
-    // Проверки
-    console.log(target)
-    console.log(admissionMax)
-    console.log(admissionMin)
+    
     return sieve
 }
