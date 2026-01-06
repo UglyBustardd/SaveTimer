@@ -52,21 +52,38 @@ function calculatePO(PP) { // Расчёт ПО
     }
     return PO
 }
+function randomSieve(min, max) {
+    let random = Math.random() * (max - min) + min;
+    random = random - (random % 0.05);
+    return parseFloat(random.toFixed(2))
+}
+
+
 function devation(min, max) { // Расчёт допустимого отклонения для придумывания рассева
     // const minValue = ;
     // const maxValue = ;
 
-    const target = []; // Значение ПО для целевого рассева
+    const target = []; // Значение ПО целевого рассева
     const admissionMin = []; // Низ по допуску по ГОСТ
     const admissionMax = []; // Верх по допуску по ГОСТ
+    const sieve = []; // Значения ПО для рандомного рассева
 
     for (let i = 0; i < 12; i++) {
         target.push(calculatePO(calculatePP(getWeight()))[i])
     }
     for (let i = 0; i < 12; i++) {
-        admissionMax.push(admission()[i]);
+        admissionMax.push(admission()[i * 2]);
     }
     for (let i = 0; i < 12; i++) {
-        admissionMin.push(admission()[i * 2]);
+        admissionMin.push(admission()[i]);
     }
+
+    for (let i = 0; i < 12; i++) {
+        sieve.push(randomSieve(admissionMin[i], admissionMax[i]));
+    }
+    // Проверки
+    console.log(target)
+    console.log(admissionMax)
+    console.log(admissionMin)
+    return sieve
 }
