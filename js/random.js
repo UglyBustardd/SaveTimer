@@ -58,7 +58,7 @@ function randomSieve(min, max) {
     return parseFloat(random.toFixed(2))
 }
 
-function calculateRandomSieve() { 
+function calculateRandomSieve() { // Возвращает ПО для рандомного рассева
     const target = []; // Значение ПО целевого рассева
     for (let i = 0; i < 12; i++) {
         target.push(calculatePO(calculatePP(getWeight()))[i])
@@ -88,5 +88,27 @@ function calculateRandomSieve() {
         }
         // sieve.push(randomSieve(admissionMin[i], admissionMax[i]));
     }
+    sieve[11] = 100;
     return sieve
+}
+
+function calculatePoToPp() {
+    const randomPP = [];
+    const randomPO = calculateRandomSieve();
+    // const randomPO = [1, 3, 5, 7, 9, 10, 17, 18, 29, 31, 51, 122];
+    randomPP.push(randomPO[0]);
+    for (let i = 1; i < 12; i++) {
+        randomPP.push(randomPO[i] - randomPO[i-1]);
+    }
+    console.log(randomPO); // Проверка
+    return randomPP
+}
+
+function calculatePpToWeight() {
+    const randomWeight = [];
+    const randomPP = calculatePoToPp();
+    for (let i = 0; i < 12; i++) {
+        randomWeight.push(parseFloat(randomPP[i] * 100));
+    }
+    return randomWeight
 }
