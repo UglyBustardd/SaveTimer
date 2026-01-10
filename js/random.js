@@ -89,7 +89,6 @@ function calculateRandomSieve() { // Возвращает ПО для рандо
         else {
             sieve.push(randomSieve(minValue, admissionMax[i]))
         }
-        // sieve.push(randomSieve(admissionMin[i], admissionMax[i]));
     }
     sieve[11] = 100;
     return sieve
@@ -101,9 +100,10 @@ function calculatePoToPp() {
     // const randomPO = [1, 3, 5, 7, 9, 10, 17, 18, 29, 31, 51, 122];
     randomPP.push(randomPO[0]);
     for (let i = 1; i < 12; i++) {
-        randomPP.push(randomPO[i] - randomPO[i-1]);
+        let PoToPp = (randomPO[i] - randomPO[i-1]).toFixed(2);
+        randomPP.push(PoToPp);
     }
-    console.log(randomPO); // Проверка
+    // console.log(randomPO); // Проверка
     return randomPP
 }
 
@@ -111,7 +111,8 @@ function calculatePpToWeight() {
     const randomWeight = [];
     const randomPP = calculatePoToPp();
     for (let i = 0; i < 12; i++) {
-        randomWeight.push(parseFloat(randomPP[i] * 100));
+        let PoToPp = parseFloat(randomPP[i] * 100).toFixed(0);
+        randomWeight.push(PoToPp)
     }
     return randomWeight
 }
@@ -121,7 +122,10 @@ function addSieve() { //Функция для добавления блока с
     const main = document.querySelector("main");
     const newDiv = document.createElement("div");
     newDiv.className = "randomSieve";
-    const quantityOfSieve = document.getElementById("quantity").value;
+    let quantityOfSieve = document.getElementById("quantity").value;
+    if (quantityOfSieve === "") {
+        quantityOfSieve = 1;
+    }
 
     for (let i = 0; i < quantityOfSieve; i++) {
     const table = document.createElement("table");
@@ -144,20 +148,20 @@ function addSieve() { //Функция для добавления блока с
             const admissionValues = [70, 40, 20, 15, 10, 5, 2.5, 1.25, 0.63, 0.16, 0.05, "<"];
 
             for (let i = 0; i < 12; i++) { //Номер сита
-                const cellValue = document.querySelector(`.cell_1_${i+1}`);
-                    cellValue.textContent = admissionValues[i];
+                const valueOfSieve = document.querySelector(`.cell_1_${i+1}`);
+                    valueOfSieve.textContent = admissionValues[i];
             }
-            // for (let i = 0; i < 12; i++) { //Значения массы
-            //     const cellValue = document.getElementById(`cell_2_${i+1}`);
-            //     cellValue.textContent = 
-            // }
-            // for (let i = 0; i < 12; i++) { //Значения ПО
-            //     const cellValue = document.getElementById(`cell_3_${i+1}`);
-            //     cellValue.textContent = 
-            // }
-            // for (let i = 0; i < 12; i++) { //Значения ПП
-            //     const cellValue = document.getElementById(`cell_4_${i+1}`);
-            //     cellValue.textContent = 
-            // }
+            for (let i = 0; i < 12; i++) { //Значения массы
+                let valueOfWeight = document.querySelector(`.cell_2_${i+1}`);
+                valueOfWeight.textContent = calculatePpToWeight()[i];
+            }
+            for (let i = 0; i < 12; i++) { //Значения ПП
+                let valueOfPP = document.querySelector(`.cell_3_${i+1}`);
+                valueOfPP.textContent = calculatePoToPp()[i];
+            }
+            for (let i = 0; i < 12; i++) { //Значения ПО
+                let valueOfPO = document.querySelector(`.cell_4_${i+1}`);
+                valueOfPO.textContent = calculateRandomSieve()[i];
+            }
     }
 }

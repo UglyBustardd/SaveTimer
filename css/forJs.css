@@ -12,7 +12,8 @@
         th {
             border: solid #000 2px;
             background: #bebebe;
-            width: 5vw;
+            min-width: 200px;
+            max-width: 7vw;
             height: 3vh;
             border-radius: 0;
             font-size: 1.6rem;
