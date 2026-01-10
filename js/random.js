@@ -38,6 +38,7 @@ function admission() { // Выдаёт допуски в ПО
     }
 }
 function calculatePP(weight) { // Расчёт ПП
+    weight = getWeight();
     const PP = [];
     for (let i = 0; i < 12; i++) {
         PP.push(weight[i] / 100);
@@ -45,10 +46,12 @@ function calculatePP(weight) { // Расчёт ПП
     return PP
 }
 function calculatePO(PP) { // Расчёт ПО
+    PP = calculatePP()
     const PO = [];
     PO.push(PP[0]);
     for (let i = 1; i < PP.length; i++) {
             PO.push(PO[i-1] + PP[i]);
+            PO[i].toFixed(2);
     }
     return PO
 }
@@ -111,4 +114,50 @@ function calculatePpToWeight() {
         randomWeight.push(parseFloat(randomPP[i] * 100));
     }
     return randomWeight
+}
+
+ 
+function addSieve() { //Функция для добавления блока с выводом значений
+    const main = document.querySelector("main");
+    const newDiv = document.createElement("div");
+    newDiv.className = "randomSieve";
+    const quantityOfSieve = document.getElementById("quantity").value;
+
+    for (let i = 0; i < quantityOfSieve; i++) {
+    const table = document.createElement("table");
+    // Добавляем саму таблицу
+        for (let row = 1; row < 5; row++) { 
+            const tr = document.createElement("tr");
+
+            for (let col = 1; col < 13; col++) {
+                const td = document.createElement("td");
+                const cellId = `cell_${row}_${col}`;
+                td.className = cellId;
+                tr.appendChild(td);
+            }
+            table.append(tr);
+        }
+            newDiv.append(table);
+            main.append(newDiv);
+
+            // Заполнение данными
+            const admissionValues = [70, 40, 20, 15, 10, 5, 2.5, 1.25, 0.63, 0.16, 0.05, "<"];
+
+            for (let i = 0; i < 12; i++) { //Номер сита
+                const cellValue = document.querySelector(`.cell_1_${i+1}`);
+                    cellValue.textContent = admissionValues[i];
+            }
+            // for (let i = 0; i < 12; i++) { //Значения массы
+            //     const cellValue = document.getElementById(`cell_2_${i+1}`);
+            //     cellValue.textContent = 
+            // }
+            // for (let i = 0; i < 12; i++) { //Значения ПО
+            //     const cellValue = document.getElementById(`cell_3_${i+1}`);
+            //     cellValue.textContent = 
+            // }
+            // for (let i = 0; i < 12; i++) { //Значения ПП
+            //     const cellValue = document.getElementById(`cell_4_${i+1}`);
+            //     cellValue.textContent = 
+            // }
+    }
 }
