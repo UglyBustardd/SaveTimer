@@ -1,347 +1,50 @@
-; const quantityOfSamples = document.getElementById("quantity").value; // Количнство требуемых рассевов
+Изначальный код создания блока с выводом значений
 
-; // Получаем каждую ячейку рассева
-; const value1 = document.getElementById("value1");
-; const value2 = document.getElementById("value2");
-; const value3 = document.getElementById("value3");
-; const value4 = document.getElementById("value4");
-; const value5 = document.getElementById("value5");
-; const value6 = document.getElementById("value6");
-; const value7 = document.getElementById("value7");
-; const value8 = document.getElementById("value8");
-; const value9 = document.getElementById("value9");
-; const value10 = document.getElementById("value10");
-; const value11 = document.getElementById("value11");
+function addSieve() { //Функция для добавления блока с выводом значений
+    const main = document.querySelector("main");
+    const newDiv = document.createElement("div");
+    newDiv.className = "randomSieve";
+    let quantityOfSieve = document.getElementById("quantity").value;
+    if (quantityOfSieve === "") {
+        quantityOfSieve = 1;
+    }
 
-; // Кнопка запуска расчёта
-; const start = document.getElementById("start");
+    for (let i = 0; i < quantityOfSieve; i++) {
+    const number = document.createElement("h2");
+    const table = document.createElement("table");
+    // Добавляем саму таблицу
+        for (let row = 1; row < 5; row++) { 
+            const tr = document.createElement("tr");
 
-function getRandomValue(min, max) { // Возвращает случайное число кратное 5 в указанном диапазоне.
-    const minMultiple = Math.ceil(min/5) * 5;
-    const maxMultiple = Math.ceil(max/5) * 5;
-    const count = (maxMultiple - minMultiple) / 5 + 1;
-    return minMultiple + Math.floor(Math.random() * count) * 5;
-}
-function admission() { // Выдаёт массив с допусками по грунтам
-    const soilType = document.getElementById("soil").value;
-    if (soilType === "c1") {
-        return [0, 0, 0, 10, 20, 40, 35, 60, 45, 70, 75, 92, 80, 93]
-    }
-    else if (soilType === "c2") {
-        return [0, 0, 0, 0, 0, 10, 10, 35, 25, 50, 35, 65, 55, 80, 65, 90, 75, 92]
-    }
-    else if (soilType === "c4") {
-        return [0, 10, 15, 35, 28, 55, 40, 70, 50, 80, 60, 85, 80, 95, 91, 97, 95, 100]
-    }
-    else if (soilType === "c5") {
-        return [0, 0, 0, 10, 25, 60, 45, 80, 57, 85, 67, 88, 80, 95, 90, 97, 95, 100]
-    }
-    else if (soilType === "c10") {
-        return [0, 0, 0, 10, 25, 60, 45, 80, 57, 85, 71, 91, 87, 97, 95, 100]
-    }
-}
-function getWeight() { // Получаем значения из примера рассева
-    const value1 = parseInt(document.getElementById("value1").value);
-    const value2 = parseInt(document.getElementById("value2").value);
-    const value3 = parseInt(document.getElementById("value3").value);
-    const value4 = parseInt(document.getElementById("value4").value);
-    const value5 = parseInt(document.getElementById("value5").value);
-    const value6 = parseInt(document.getElementById("value6").value);
-    const value7 = parseInt(document.getElementById("value7").value);
-    const value8 = parseInt(document.getElementById("value8").value);
-    const value9 = parseInt(document.getElementById("value9").value);
-    const value10 = parseInt(document.getElementById("value10").value);
-    const value11 = parseInt(document.getElementById("value11").value);
-    return [value1, value2, value3, value4, value5, value6, value7, value8, value9, value10, value11]
-}
-function getMinMax() {// Расчитывает минимальное и максимальное значение для каждой ячейки
-    const values = [];
-    for (let i = 0; i < 11; i++) { 
-            if (getWeight()[i] > 1000) {
-                values.push(getWeight()[i] - (getWeight()[i] * 0.10));
-                values.push(getWeight()[i] + (getWeight()[i] * 0.10));
+            for (let col = 1; col < 13; col++) {
+                const td = document.createElement("td");
+                const cellId = `cell_${row}_${col}`;
+                td.className = cellId;
+                tr.appendChild(td);
             }
-            else {
-                values.push(getWeight()[i] - (getWeight()[i] * 0.20));
-                values.push(getWeight()[i] + (getWeight()[i] * 0.20));
-            }
-    }
-
-    for (let i = 0; i < 11; i++){ 
-        values[i] = parseInt(values[i]);
-    }
-return values
-}
-// function calculatePasses() {
-//     const fullPasses = [];
-//     for (let i = 0; i < 11; i++) {
-
-//     }
-//     return fullPasses
-// }
-// function calculateBalances() {
-//     const fullBalances = [];
-//     for (let i = 0; i < 11; i++) {
-
-//     }
-//     return fullBalances
-// }
-
-function getAdmissionValue() {
-    const admissionValues = [];
-    for (let i = 0; i <= 11; i + 2) { //Задаём рандомные значения
-        admissionValues.push(parseInt(getRandomValue(getMinMax()[i], getMinMax()[i++])));
-    }
-    return admissionValues
-    // Добавь расчёт полных ПО и ПП
-    // Проверяем подходит ли значение по допускам
-}
-
-
-// 1. Задаём рандомное число +
-// 2.1 Проверяем какая у нас ЩГПС +
-// 2.2 Задать список допустимых значений по гост +
-// 3. Получаем значения из вставленного рассева  +
-// 4. Определяем диапазон на сколько можно прибавлять или убавлять +
-// 5. Создаём рандомное число в диапозоне (П.4) кратное 5 +
-// 6. Проверка суммы полученного значения (пока хз как реализовать)
-// 7. Выдаём требуемое количнство рассевов 
-
-function check() {
-    console.log("Допуски: " + admission());
-    console.log("Массы: " + getWeight());
-    console.log("Границы допусков: " + getMinMax());
-    console.log("Придуманные значения: " + getAdmissionValue());
-}
-
-
-
-//  дывитадыивааыв
-const quantityOfSamples = document.getElementById("quantity").value; // Количнство требуемых рассевов
-
-// Получаем каждую ячейку рассева
-const value1 = document.getElementById("value1");
-const value2 = document.getElementById("value2");
-const value3 = document.getElementById("value3");
-const value4 = document.getElementById("value4");
-const value5 = document.getElementById("value5");
-const value6 = document.getElementById("value6");
-const value7 = document.getElementById("value7");
-const value8 = document.getElementById("value8");
-const value9 = document.getElementById("value9");
-const value10 = document.getElementById("value10");
-const value11 = document.getElementById("value11");
-const value12 = document.getElementById("value12");
-
-// Кнопка запуска расчёта
-const start = document.getElementById("start");
-
-                                                    // Функции
-
-// Возвращает случайное число кратное 5 в указанном диапазоне.
-function getRandomValue(min, max) { 
-    const random = Math.random() * (max - min) + min;
-    const withTwoDecimals = Math.round(random * 100) / 100;
-    const fractional = Math.round((withTwoDecimals % 1) * 100);
-    const tens = Math.floor(fractional / 10); // первая цифра после запятой (0-9)
-    let ones = fractional % 10; // вторая цифра после запятой (0-9)
-    ones = Math.random() > 0.5 ? 0 : 5;
-    const newFractional = tens * 10 + ones;
-    const integerPart = Math.floor(withTwoDecimals);
-    return integerPart + newFractional / 100;
-    
-    // const minMultiple = Math.ceil(min/5) * 5;
-    // const maxMultiple = Math.ceil(max/5) * 5;
-    // const count = (maxMultiple - minMultiple) / 5 + 1;
-    // return minMultiple + Math.floor(Math.random() * count) * 5;
-}
-// Выдаёт массив с допусками по грунтам
-function admission() { 
-    const soilType = document.getElementById("soil").value;
-    if (soilType === "c1") {
-        return [0, 0, 0, 10, 20, 40, 35, 60, 45, 70, 75, 92, 80, 93]
-    }
-    else if (soilType === "c2") {
-        return [0, 0, 0, 0, 0, 10, 10, 35, 25, 50, 35, 65, 55, 80, 65, 90, 75, 92]
-    }
-    else if (soilType === "c4") {
-        return [0, 10, 15, 35, 28, 55, 40, 70, 50, 80, 60, 85, 80, 95, 91, 97, 95, 100]
-    }
-    else if (soilType === "c5") {
-        return [0, 0, 0, 10, 25, 60, 45, 80, 57, 85, 67, 88, 80, 95, 90, 97, 95, 100]
-    }
-    else if (soilType === "c10") {
-        return [0, 0, 0, 10, 25, 60, 45, 80, 57, 85, 71, 91, 87, 97, 95, 100]
-    }
-}
-// Получаем значения из примера рассева
-function getWeight() { 
-    const value1 = parseInt(document.getElementById("value1").value);
-    const value2 = parseInt(document.getElementById("value2").value);
-    const value3 = parseInt(document.getElementById("value3").value);
-    const value4 = parseInt(document.getElementById("value4").value);
-    const value5 = parseInt(document.getElementById("value5").value);
-    const value6 = parseInt(document.getElementById("value6").value);
-    const value7 = parseInt(document.getElementById("value7").value);
-    const value8 = parseInt(document.getElementById("value8").value);
-    const value9 = parseInt(document.getElementById("value9").value);
-    const value10 = parseInt(document.getElementById("value10").value);
-    const value11 = parseInt(document.getElementById("value11").value);
-    const value12 = parseInt(document.getElementById("value12").value);
-    return [value1, value2, value3, value4, value5, value6, value7, value8, value9, value10, value11, value12]
-}
-// Расчитывает минимальное и максимальное значение для каждой ячейки
-function getMinMax() {
-    const values = [];
-    const passes = calculatePasses();
-    for (let i = 0; i < 12; i++) { 
-            const pass = passes[i];
-            if (pass > 1000) {
-                values.push(pass - (pass * 0.10));
-                values.push(pass + (pass * 0.10));
-            }
-            else if (passes[i] == 0) {
-                values.push(0);
-                values.push(0);
-            }
-            else {
-                values.push(pass - (pass * 0.20));
-                values.push(pass + (pass * 0.20));
-            }
-    }
-
-    for (let i = 0; i < 12; i++){ 
-        values[i] = parseInt(values[i]);
-    }
-return values
-}
-// Расчёт ПП и ПО для исходного рассева
-function calculatePasses() { // Расчитывает полные проходы для исходного грунта
-    let fullPasses = [];
-    for (let i = 0; i < 12; i++) {
-        fullPasses.push(getWeight()[i] / 100);
-    }
-    return fullPasses
-}
-function calculateBalances() {
-    const fullBalances = [calculatePasses()[0]];
-    for (let i = 1; i < 12; i++) {
-        fullBalances.push(fullBalances[i - 1] + calculatePasses()[i]);
-    }
-    return fullBalances
-}
-// Расчёт рандомного рассева
-function getAdmissionValue() {
-    const admissionValues = [];
-    const minMax = getMinMax();
-
-    for (let i = 0; i < 12; i++) {
-        const min = minMax[i * 2];
-        const max = minMax[i * 2 + 1];
-        let value = getRandomValue(min, max) * 100;
-        value = value - (value % 5); // Кратно 5
-        admissionValues.push(value);
-    }
-    for (let i = 0; i < 12; i++) {
-        admissionValues[i] = parseInt(admissionValues[i]);
-    }
-    return normalizeAdmissionValues(admissionValues);
-}
-function normalizeAdmissionValues(admissionValues) {
-    // ... весь код функции нормализации ...
-}
-// Расчёт ПП и ПО для рандомного рассева
-function calculateAdmissionPasses() {
-    let passes = [];
-    for (let i = 0; i < 12; i++) {
-        passes.push(getAdmissionValue()[i] / 100);
-    }
-    return passes
-}
-function calculateAdmissionBalance() {
-    const balances = [calculateAdmissionPasses()[0]];
-    for (let i = 1; i < 12; i++) {
-        balances.push(balances[i - 1] + calculateAdmissionPasses()[i]);
-    }
-    return balances
-}
-// Приводит рассев к варианту, где сумма = 10000
-function normalizeAdmissionValues(admissionValues) {
-    const targetSum = 10000;
-    const sum = admissionValues.reduce((total, value) => total + value, 0);
-    if (sum === targetSum) {
-        return admissionValues;
-    }
-    const ratio = targetSum / sum;
-    const normalizedValues = admissionValues.map(value => {
-        let normalized = value * ratio;
-        normalized = Math.round(normalized / 5) * 5;
-        return normalized;
-    });
-    const normalizedSum = normalizedValues.reduce((total, value) => total + value, 0);
-    const difference = targetSum - normalizedSum;
-    if (difference !== 0) {
-        for (let i = normalizedValues.length - 1; i >= 0; i--) {
-            if (normalizedValues[i] > 0) {
-                normalizedValues[i] += difference;
-                normalizedValues[i] = Math.round(normalizedValues[i] / 5) * 5;
-                break;
-            }
+            table.append(tr);
         }
+            newDiv.append(table);
+            main.append(newDiv);
+
+            // Заполнение данными
+            const admissionValues = [70, 40, 20, 15, 10, 5, 2.5, 1.25, 0.63, 0.16, 0.05, "<"];
+
+            for (let i = 0; i < 12; i++) { //Номер сита
+                const valueOfSieve = newDiv.querySelector(`.cell_1_${i+1}`);
+                    valueOfSieve.textContent = admissionValues[i];
+            }
+            for (let i = 0; i < 12; i++) { //Значения массы
+                let valueOfWeight = newDiv.querySelector(`.cell_2_${i+1}`);
+                valueOfWeight.textContent = calculatePpToWeight()[i];
+            }
+            for (let i = 0; i < 12; i++) { //Значения ПП
+                let valueOfPP = newDiv.querySelector(`.cell_3_${i+1}`);
+                valueOfPP.textContent = calculatePoToPp()[i];
+            }
+            for (let i = 0; i < 12; i++) { //Значения ПО
+                let valueOfPO = newDiv.querySelector(`.cell_4_${i+1}`);
+                valueOfPO.textContent = calculateRandomSieve()[i];
+            }
     }
-    const finalSum = normalizedValues.reduce((total, value) => total + value, 0);
-    if (finalSum !== targetSum) {
-        const lastIndex = normalizedValues.length - 1;
-        normalizedValues[lastIndex] += (targetSum - finalSum);
-    }
-    return normalizedValues;
-}
-// Проверка рандомного рассева на допуски по типу ЩГПС
-function verificationAdmission() {
-
-}
-    // Проверяем подходит ли значение по допускам
-function check() {
-    // console.log("Допуски: " + admission());
-    // console.log("Массы: " + getWeight());
-    console.log("Границы допусков: " + getMinMax());
-    console.log("Полные проходы: " + calculatePasses());
-    console.log("Полные остатки: " +  calculateBalances());
-    console.log("Значения: " + getAdmissionValue());
-    console.log("Значения: " + normalizeAdmissionValues(getAdmissionValue()));
-    console.log("ПО: " + calculateAdmissionPasses());
-    console.log("ПП: " + calculateAdmissionBalance());
-    // console.log(`сумма: ${}`);
-}
-
-
-
-function devation(min, max) { // Расчёт допустимого отклонения
- для придумывания рассева
-    // const minValue = ;
-    // const maxValue = ;
-
-    const target = []; // Значение ПО целевого рассева
-    const admissionMin = []; // Низ по допуску по ГОСТ
-    const admissionMax = []; // Верх по допуску по ГОСТ
-    const sieve = []; // Значения ПО для рандомного рассева
-
-    for (let i = 0; i < 12; i++) {
-        target.push(calculatePO(calculatePP(getWeight()))[i])
-    }
-    for (let i = 0; i < 12; i++) {
-        admissionMax.push(admission()[i * 2]);
-    }
-    for (let i = 0; i < 12; i++) {
-        admissionMin.push(admission()[i]);
-    }
-
-    for (let i = 0; i < 12; i++) {
-        sieve.push(randomSieve(admissionMin[i], admissionMax[i]));
-    }
-    // Проверки
-    console.log(target)
-    console.log(admissionMax)
-    console.log(admissionMin)
-    return sieve
 }
