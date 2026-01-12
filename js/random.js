@@ -18,7 +18,7 @@ function getWeight() { // Получаем значения из примера 
     const value12 = parseInt(document.getElementById("value12").value);
     return [value1, value2, value3, value4, value5, value6, value7, value8, value9, value10, value11,value12]
 }
-function admission() { // Выдаёт допуски в ПО
+function getAdmission() { // Выдаёт допуски в ПО
     const soilType = document.getElementById("soil").value;
     // В список включены ячейки, которые не учитываются в ГОСТ`е (просто продублировал предыдущие)
     if (soilType === "c1") {
@@ -69,12 +69,12 @@ function calculateRandomSieve() { // Возвращает ПО для рандо
 
     const admissionMax = []; // Верх по допуску по ГОСТ
     for (let i = 1; i < 24; i += 2) {
-        admissionMax.push(admission()[i]);
+        admissionMax.push(getAdmission()[i]);
     }
 
     const admissionMin = []; // Низ по допуску по ГОСТ
     for (let i = 0; i < 24; i += 2) {
-        admissionMin.push(admission()[i]);
+        admissionMin.push(getAdmission()[i]);
     }
 
     const sieve = []; // Значения ПО для рандомного рассева
@@ -169,4 +169,3 @@ function calculatePpToWeight() {
         }
     }
 }
-
