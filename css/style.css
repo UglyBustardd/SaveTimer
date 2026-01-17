@@ -9,6 +9,9 @@
     padding: 0;
     font-family: Roboto;
 }
+body {
+    background: radial-gradient(#bebebe, #f4f4f4, #fff, #ffffff3c, #fff, #f4f4f4, #fff)
+}
 
 header {
     display: flex;
@@ -34,6 +37,7 @@ header {
         height: 70px;
         width: 22vw;
         margin: auto;
+        background: transparent;
 
         &::placeholder {
             color: #000;
@@ -71,7 +75,7 @@ header {
         border-radius: 100px;
         font-size: 1.7rem;
         font-weight: bold;
-        background-color: #fff;
+        background-color: transparent;
 
         &:hover {
             transform: scale(1.1);

@@ -8,10 +8,10 @@
             border: solid 2px #000;
             margin: 30px auto;
             font-size: 1.6rem;
-        }
-        th {
+
+                    th {
             border: solid #000 2px;
-            background: #bebebe;
+            background: #fff;
             min-width: 200px;
             max-width: 7vw;
             height: 3vh;
@@ -20,10 +20,22 @@
         }
         td {
             border: solid #000 2px;
-            background: #bebebe;
+            background: #fff;
             width: 5vw;
             height: 3vh;
             border-radius: 0;
             font-size: 1.6rem;
         }
+        .cell_1_1, .cell_1_2, .cell_1_3, .cell_1_4, .cell_1_5, .cell_1_6, .cell_1_7,
+        .cell_1_8, .cell_1_9, .cell_1_10, .cell_1_11, .cell_1_12, .cell_1_13 {
+            background: #fff !important;
+            font-size: 1.8rem;
+        }
+        .cell_4_1, .cell_4_2, .cell_4_3, .cell_4_5, .cell_4_6, .cell_4_7,
+        .cell_4_9, .cell_4_11, .cell_4_12 {
+                background: #b9dfb9;
+            }
+        }
+
+
 }
