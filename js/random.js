@@ -1,5 +1,3 @@
-const quantityOfSamples = document.getElementById("quantity").value; // Количнство требуемых рассевов
-
 // Кнопка запуска расчёта
 const start = document.getElementById("start");
 
@@ -19,6 +17,14 @@ function getWeight() { // Получаем значения из примера 
     const value13 = parseInt(document.getElementById("value13").value);
     return [value1, value2, value3, value4, value5, value6, value7, value8, value9, value10, value11,value12, value13]
 }
+                                                                        // Массив для проверки
+function proverka() {
+    const huinya = [0, 1970, 855, 1100, 1875, 1590, 695, 405, 375, 335, 275, 200, 325];
+    for (let i = 1; i < 14; i++) {
+        document.getElementById(`value${i}`).value = huinya[i-1];
+    }
+}
+
 function getAdmission() { // Выдаёт допуски в ПО
     const soilType = document.getElementById("soil").value;
     // В список включены ячейки, которые не учитываются в ГОСТ`е (просто продублировал предыдущие)
@@ -57,21 +63,20 @@ function calculatePO(PP) { // Расчёт ПО
     return PO
 }
 function randomSieve(min, max, targetValue) {
-    let random = Math.random() * (max - min) + min;
-    if ((Math.abs(random - targetValue)) > (targetValue * 0.2)) {
-        let modul = Math.random();
-        if (modul > 0.5) {
-        random = (targetValue + targetValue * Math.random()) * (max - min) + min;
-        }
-        else {
-            random = (targetValue - targetValue * Math.random()) * (max - min) + min;
-        }
+    const target = Math.max(min, Math.min(max, targetValue));
+    const maxDeviation = target * 0.02; // Отклонение от целевого рассева
+    
+    const effectiveMin = Math.max(min, target - maxDeviation);
+    const effectiveMax = Math.min(max, target + maxDeviation);
+
+    if (effectiveMin >= effectiveMax) {
+        return parseFloat(target.toFixed(2));
     }
-    else {
-    random = random;
-    }
-    random = random - (random % 0.05);
-    return parseFloat(random.toFixed(2))
+    let random = Math.random() * (effectiveMax - effectiveMin) + effectiveMin;
+    random = Math.round(random * 20) / 20;
+    random = Math.max(min, Math.min(max, random));
+    
+    return parseFloat(random.toFixed(2));
 }
 
 function calculateRandomSieve() { // Возвращает ПО для рандомного рассева
@@ -130,7 +135,7 @@ function calculatePpToWeight() {
 
  function addSieve() {
     const main = document.querySelector("main");
-    const quantityOfSieve = document.getElementById("quantity").value || 1;
+    const quantityOfSieve = document.getElementById("quantity").value || 1; // Колличество рассевов
 
     for (let i = 0; i < quantityOfSieve; i++) {
         const newDiv = document.createElement("div");
