@@ -2,20 +2,16 @@
 const start = document.getElementById("start");
 
 function getWeight() { // Получаем значения из примера рассева
-    const value1 = parseInt(document.getElementById("value1").value);
-    const value2 = parseInt(document.getElementById("value2").value);
-    const value3 = parseInt(document.getElementById("value3").value);
-    const value4 = parseInt(document.getElementById("value4").value);
-    const value5 = parseInt(document.getElementById("value5").value);
-    const value6 = parseInt(document.getElementById("value6").value);
-    const value7 = parseInt(document.getElementById("value7").value);
-    const value8 = parseInt(document.getElementById("value8").value);
-    const value9 = parseInt(document.getElementById("value9").value);
-    const value10 = parseInt(document.getElementById("value10").value);
-    const value11 = parseInt(document.getElementById("value11").value);
-    const value12 = parseInt(document.getElementById("value12").value);
-    const value13 = parseInt(document.getElementById("value13").value);
-    return [value1, value2, value3, value4, value5, value6, value7, value8, value9, value10, value11,value12, value13]
+    const getWeight = [];
+    for (let i = 1; i < 14; i++) {
+        if (document.getElementById(`value${i}`).value !== "") {
+        getWeight.push(parseInt(document.getElementById(`value${i}`).value))
+        }
+        else {
+            getWeight.push(0);
+        }
+    }
+    return getWeight
 }
                                                                         // Массив для проверки
 function proverka() {
