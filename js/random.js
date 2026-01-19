@@ -58,10 +58,18 @@ function calculatePO(PP) { // Расчёт ПО
     }
     return PO
 }
-function randomSieve(min, max, targetValue) {
+
+                                                                                                                                                        // Функция для рандома 
+function randomSieve(min, max, targetValue, weightValue = null) { // Добавьте weightValue
     const target = Math.max(min, Math.min(max, targetValue));
-    const maxDeviation = target * 0.02; // Отклонение от целевого рассева
-    
+    let deviation = 0;
+    if (weightValue !== null && weightValue > 800) {
+        deviation = 0.05;
+    } else {
+        deviation = 0.002;
+    }
+    const maxDeviation = target * deviation // Отклонение от целевого рассева
+
     const effectiveMin = Math.max(min, target - maxDeviation);
     const effectiveMax = Math.min(max, target + maxDeviation);
 
@@ -74,7 +82,7 @@ function randomSieve(min, max, targetValue) {
     
     return parseFloat(random.toFixed(2));
 }
-
+                                                                                                                                                        // Расчёт для ячеек
 function calculateRandomSieve() { // Возвращает ПО для рандомного рассева
     const target = []; // Значение ПО целевого рассева
     for (let i = 0; i < 13; i++) {
@@ -91,6 +99,7 @@ function calculateRandomSieve() { // Возвращает ПО для рандо
         admissionMin.push(getAdmission()[i]);
     }
 
+    const weight = getWeight();
     const sieve = []; // Значения ПО для рандомного рассева
     for (let i = 0; i < 13; i++) {
         let minValue = admissionMin[i];
@@ -101,37 +110,79 @@ function calculateRandomSieve() { // Возвращает ПО для рандо
             sieve.push(admissionMax[i]);
         }
         else {
-            sieve.push(randomSieve(minValue, admissionMax[i], target[i]))
+            sieve.push(randomSieve(minValue, admissionMax[i], target[i], weight[i]))
         }
     }
     sieve[12] = 100;
     return sieve
 }
 
-function calculatePoToPp() {
+function calculatePoToPp(poValues) {
     const randomPP = [];
-    const randomPO = calculateRandomSieve();
-    randomPP.push(randomPO[0]);
+    randomPP.push(parseFloat(randomPO[0].toFixed(2)));
     for (let i = 1; i < 13; i++) {
-        let PoToPp = (randomPO[i] - randomPO[i-1]).toFixed(2);
+        let PoToPp = (poValues[i] - poValues[i-1]).toFixed(2);
         randomPP.push(PoToPp);
     }
+    let sumPP = randomPP.reduce((sum, val) => sum + val, 0);
+
+    if (Math.abs(sumPP - 100) > 0.01) {
+        let correction = 100 - (sumPP - randomPP[12]);
+        randomPP[12] = parseFloat(correction.toFixed(2));
+    }
+    randomPP[12] = parseFloat((100 - randomPO[11]).toFixed(2));
+
     return randomPP
 }
 
-function calculatePpToWeight() {
+function calculatePpToWeight(ppValues) {
     const randomWeight = [];
-    const randomPP = calculatePoToPp();
-    for (let i = 0; i < 13; i++) {
-        let PoToPp = parseFloat(randomPP[i] * 100).toFixed(0);
-        randomWeight.push(PoToPp)
+
+    const sumPP = randomPP.reduce((sum, val) => sum + val, 0);
+    if (Math.abs(sumPP - 100) > 0.01) {
+        console.warn(`Сумма ПП = ${sumPP}, должна быть 100`);
     }
+
+    for (let i = 0; i < 13; i++) {
+        let weightValue = parseFloat(ppValues[i] * 100).toFixed(0);
+        randomWeight.push(weightValue)
+    }
+    const totalWeight = randomWeight.reduce((sum, val) => sum + parseInt(val), 0);
+    if (totalWeight !== 10000) {
+        randomWeight[12] = (10000 - randomWeight.slice(0, 12).reduce((s, v) => s + parseInt(v), 0)).toString();
+    }
+
     return randomWeight
 }
 
  function addSieve() {
     const main = document.querySelector("main");
     const quantityOfSieve = document.getElementById("quantity").value || 1; // Колличество рассевов
+
+    const allSieveData = [];
+    for (let i = 0; i < quantityOfSieve; i++) {
+    const poValues = calculateRandomSieve();
+    const ppValues = [];
+    ppValues.push(parseFloat(poValues[0].toFixed(2)));
+    for (let j = 1; j < 13; j++) {
+        const ppValue = parseFloat((poValues[j] - poValues[j-1]).toFixed(2));
+        ppValues.push(ppValue);
+    }
+    // Корректируем последнее значение
+    ppValues[12] = parseFloat((100 - poValues[11]).toFixed(2));
+    
+    // Рассчитываем Вес НА ОСНОВЕ этого ПП
+    const weightValues = [];
+    for (let j = 0; j < 13; j++) {
+        weightValues.push((ppValues[j] * 100).toFixed(0));
+    }
+        
+        allSieveData.push({
+        po: poValues,
+        pp: ppValues,
+        weight: weightValues 
+    });
+    }
 
     for (let i = 0; i < quantityOfSieve; i++) {
         const newDiv = document.createElement("div");
@@ -155,10 +206,10 @@ function calculatePpToWeight() {
             table.append(tr);
         }
         newDiv.append(table);
-        main.append(newDiv);
 
         // Заполнение данными
         const admissionValues = [70, 40, 20, 15, 10, 5, 2.5, 1.25, 0.63, 0.315, 0.16, 0.05, "<"];
+        const currentData = allSieveData[i];
 
         for (let j = 0; j < 13; j++) {
             const valueOfSieve = newDiv.querySelector(`.cell_1_${j+1}`);
@@ -167,17 +218,18 @@ function calculatePpToWeight() {
 
         for (let j = 0; j < 13; j++) {
             let valueOfWeight = newDiv.querySelector(`.cell_2_${j+1}`);
-            valueOfWeight.textContent = calculatePpToWeight()[j];
+            valueOfWeight.textContent = currentData.weight[j];
         }
 
         for (let j = 0; j < 13; j++) {
             let valueOfPP = newDiv.querySelector(`.cell_3_${j+1}`);
-            valueOfPP.textContent = calculatePoToPp()[j];
+            valueOfPP.textContent = currentData.pp[j];
         }
 
         for (let j = 0; j < 13; j++) {
             let valueOfPO = newDiv.querySelector(`.cell_4_${j+1}`);
-            valueOfPO.textContent = calculateRandomSieve()[j];
+            valueOfPO.textContent = currentData.po[j];
         }
+        main.append(newDiv);
     }
 }
