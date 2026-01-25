@@ -218,17 +218,17 @@ function calculatePpToWeight(ppValues) {
 
         for (let j = 0; j < 13; j++) {
             let valueOfWeight = newDiv.querySelector(`.cell_2_${j+1}`);
-            valueOfWeight.textContent = currentData.weight[j];
+            valueOfWeight.textContent = parseInt(currentData.weight[j]);
         }
 
         for (let j = 0; j < 13; j++) {
             let valueOfPP = newDiv.querySelector(`.cell_3_${j+1}`);
-            valueOfPP.textContent = currentData.pp[j];
+            valueOfPP.textContent = parseInt(currentData.pp[j]);
         }
 
         for (let j = 0; j < 13; j++) {
             let valueOfPO = newDiv.querySelector(`.cell_4_${j+1}`);
-            valueOfPO.textContent = currentData.po[j];
+            valueOfPO.textContent = parseInt(currentData.po[j]);
         }
         main.append(newDiv);
     }
