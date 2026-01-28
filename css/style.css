@@ -10,7 +10,7 @@
     font-family: Roboto;
 }
 body {
-    background: radial-gradient(#bebebe, #f4f4f4, #fff, #ffffff3c, #fff, #f4f4f4, #fff)
+    background: radial-gradient(#bebebe, #f4f4f4, #fff, #ffffff3c, #fff, #f4f4f4, #fff);
 }
 
 header {
@@ -82,4 +82,15 @@ header {
             background: #f4f4f4;
         }
     }
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+    -webkit-appearance: none;
+    appearance: none;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
