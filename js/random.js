@@ -19,7 +19,7 @@ function getAdmission() {
         return [0, 0, 0, 10, 20, 40, 20, 40, 35, 60, 45, 70, 55, 80, 55, 80, 70, 90, 70, 90, 75, 92, 80, 93, 100, 100]
     }
     else if (soilType === "c2") {
-        return [0, 0, 0, 0, 0, 10, 0, 10, 10, 35, 25, 50, 35, 65, 35, 65, 55, 80, 55, 80, 65, 90, 75, 92, 100, 100]
+        return [0, 0, 0, 0, 0, 10, 0, 35, 10, 35, 25, 50, 35, 65, 35, 65, 55, 80, 55, 80, 65, 90, 75, 92, 100, 100]
     }
     else if (soilType === "c4") {
         return [0, 10, 15, 35, 28, 55, 28, 55, 40, 70, 50, 80, 60, 85, 60, 85, 80, 95, 80, 95, 91, 97, 95, 100, 100, 100]
@@ -53,10 +53,13 @@ function calculatePO(PP) {
 function randomSieve(min, max, targetValue, weightValue = null, weightValueIndex = null) {
     const target = Math.max(min, Math.min(max, targetValue));
     let deviation = 0;
-    if (weightValue !== null && weightValue > 800) {
+    if ((weightValue !== null) && (weightValue > 800) && (weightValueIndex !== null) && (weightValueIndex  > 5)) {
+        deviation = 0.005;
+    }
+    else if (weightValue !== null && weightValue > 800) {
         deviation = 0.05;
     }
-    else if (weightValue !== null && weightValue < 400 && weightValueIndex !== null && weightValueIndex < 5) {
+    else if ((weightValue !== null) && (weightValue < 400) && (weightValueIndex !== null) && (weightValueIndex < 5)) {
         deviation = 0.5;
     }
     else {
