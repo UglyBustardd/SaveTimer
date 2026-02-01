@@ -14,9 +14,20 @@ function getWeight() { // Получаем значения из примера 
     return getWeight
 }
                                                                         // Массив для проверки
-function proverka() {
-    // const huinya = [0, 1970, 855, 1100, 1875, 1590, 695, 405, 375, 335, 275, 200, 325]; // ЩГПС С4
-    const huinya = [0, 875,	2680, 1575, 1205, 1080,	305, 435, 650, 530,	215, 285, 165]; // ЩГПС С5
+function proverka(value) {
+    let huinya;
+    if (value == 1) {
+    huinya = [0, 355, 2200, 880, 1135, 1285, 910, 735, 640, 255, 200, 680, 725]; // ЩГПС С1
+    }
+     if (value == 2) {
+    huinya = [0, 0, 395, 1420, 1580, 720, 550, 355, 1350, 900, 810, 1040, 880]; // ЩГПС С2
+    }
+     if (value == 4) {
+    huinya = [0, 1970, 855, 1100, 1875, 1590, 695, 405, 375, 335, 275, 200, 325]; // ЩГПС С4
+    }
+     if (value == 5) {
+    huinya = [0, 875,	2680, 1575, 1205, 1080,	305, 435, 650, 530,	215, 285, 165]; // ЩГПС С5
+    }
     for (let i = 1; i < 14; i++) {
         document.getElementById(`value${i}`).value = huinya[i-1];
     }
@@ -61,12 +72,16 @@ function calculatePO(PP) { // Расчёт ПО
 }
 
                                                                                                                                                         // Функция для рандома 
-function randomSieve(min, max, targetValue, weightValue = null) { // Добавьте weightValue
+function randomSieve(min, max, targetValue, weightValue = null, weightValueIndex = null) {
     const target = Math.max(min, Math.min(max, targetValue));
     let deviation = 0;
     if (weightValue !== null && weightValue > 800) {
         deviation = 0.05;
-    } else {
+    }
+    else if (weightValue !== null && weightValue < 400 && weightValueIndex !== null && weightValueIndex < 5) {
+        deviation = 0.5;
+    }
+    else {
         deviation = 0.002;
     }
     const maxDeviation = target * deviation // Отклонение от целевого рассева
@@ -107,11 +122,15 @@ function calculateRandomSieve() { // Возвращает ПО для рандо
         if (i > 0) {
             minValue = Math.max(admissionMin[i], sieve[i - 1]);
         }
-        if (minValue > admissionMax[i]) {
+
+        if (admissionMin[i] === admissionMax[i]) {
+            sieve.push(admissionMin[i])
+        }
+        else if (minValue > admissionMax[i]) {
             sieve.push(admissionMax[i]);
         }
         else {
-            sieve.push(randomSieve(minValue, admissionMax[i], target[i], weight[i]))
+            sieve.push(randomSieve(minValue, admissionMax[i], target[i], weight[i], i))
         }
     }
     sieve[12] = 100;
@@ -156,7 +175,7 @@ function calculatePpToWeight(ppValues) {
     return randomWeight
 }
 
- function addSieve() {
+ function addSieve() { // Вывод таблиц с результатом рассевов
     const main = document.querySelector("main");
     const quantityOfSieve = document.getElementById("quantity").value || 1; // Колличество рассевов
 
