@@ -1,7 +1,7 @@
 // Кнопка запуска расчёта
 const start = document.getElementById("start");
 
-function getWeight() { // Получаем значения из примера рассева
+function getWeight() {
     const getWeight = [];
     for (let i = 1; i < 14; i++) {
         if (document.getElementById(`value${i}`).value !== "") {
