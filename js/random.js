@@ -1,7 +1,6 @@
-// Кнопка запуска расчёта
 const start = document.getElementById("start");
 
-function getWeight() { // Получаем значения из примера рассева
+function getWeight() {
     const getWeight = [];
     for (let i = 1; i < 14; i++) {
         if (document.getElementById(`value${i}`).value !== "") {
@@ -13,29 +12,9 @@ function getWeight() { // Получаем значения из примера 
     }
     return getWeight
 }
-                                                                        // Массив для проверки
-function proverka(value) {
-    let huinya;
-    if (value == 1) {
-    huinya = [0, 355, 2200, 880, 1135, 1285, 910, 735, 640, 255, 200, 680, 725]; // ЩГПС С1
-    }
-     if (value == 2) {
-    huinya = [0, 0, 395, 1420, 1580, 720, 550, 355, 1350, 900, 810, 1040, 880]; // ЩГПС С2
-    }
-     if (value == 4) {
-    huinya = [0, 1970, 855, 1100, 1875, 1590, 695, 405, 375, 335, 275, 200, 325]; // ЩГПС С4
-    }
-     if (value == 5) {
-    huinya = [0, 875,	2680, 1575, 1205, 1080,	305, 435, 650, 530,	215, 285, 165]; // ЩГПС С5
-    }
-    for (let i = 1; i < 14; i++) {
-        document.getElementById(`value${i}`).value = huinya[i-1];
-    }
-}
 
-function getAdmission() { // Выдаёт допуски в ПО
+function getAdmission() {
     const soilType = document.getElementById("soil").value;
-    // В список включены ячейки, которые не учитываются в ГОСТ`е (просто продублировал предыдущие)
     if (soilType === "c1") {
         return [0, 0, 0, 10, 20, 40, 20, 40, 35, 60, 45, 70, 55, 80, 55, 80, 70, 90, 70, 90, 75, 92, 80, 93, 100, 100]
     }
@@ -52,7 +31,7 @@ function getAdmission() { // Выдаёт допуски в ПО
         return [0, 0, 0, 10, 25, 60, 25, 60, 45, 80, 57, 85, 57, 85, 57, 85, 71, 91, 71, 91, 87, 97, 95, 100, 100, 100]
     }
 }
-function calculatePP(weight) { // Расчёт ПП
+function calculatePP(weight) {
     weight = getWeight();
     const PP = [];
     for (let i = 0; i < getWeight().length; i++) {
@@ -60,7 +39,7 @@ function calculatePP(weight) { // Расчёт ПП
     }
     return PP
 }
-function calculatePO(PP) { // Расчёт ПО
+function calculatePO(PP) {
     PP = calculatePP()
     const PO = [];
     PO.push(PP[0]);
@@ -71,7 +50,6 @@ function calculatePO(PP) { // Расчёт ПО
     return PO
 }
 
-                                                                                                                                                        // Функция для рандома 
 function randomSieve(min, max, targetValue, weightValue = null, weightValueIndex = null) {
     const target = Math.max(min, Math.min(max, targetValue));
     let deviation = 0;
@@ -84,7 +62,7 @@ function randomSieve(min, max, targetValue, weightValue = null, weightValueIndex
     else {
         deviation = 0.002;
     }
-    const maxDeviation = target * deviation // Отклонение от целевого рассева
+    const maxDeviation = target * deviation
 
     const effectiveMin = Math.max(min, target - maxDeviation);
     const effectiveMax = Math.min(max, target + maxDeviation);
@@ -98,25 +76,25 @@ function randomSieve(min, max, targetValue, weightValue = null, weightValueIndex
     
     return parseFloat(random.toFixed(2));
 }
-                                                                                                                                                        // Расчёт для ячеек
-function calculateRandomSieve() { // Возвращает ПО для рандомного рассева
-    const target = []; // Значение ПО целевого рассева
+
+function calculateRandomSieve() {
+    const target = [];
     for (let i = 0; i < getWeight().length; i++) {
         target.push(calculatePO(calculatePP(getWeight()))[i])
     }
 
-    const admissionMax = []; // Верх по допуску по ГОСТ
+    const admissionMax = [];
     for (let i = 1; i < getAdmission().length; i += 2) {
         admissionMax.push(getAdmission()[i]);
     }
 
-    const admissionMin = []; // Низ по допуску по ГОСТ
+    const admissionMin = [];
     for (let i = 0; i < getAdmission().length; i += 2) {
         admissionMin.push(getAdmission()[i]);
     }
 
     const weight = getWeight();
-    const sieve = []; // Значения ПО для рандомного рассева
+    const sieve = [];
     for (let i = 0; i < weight.length; i++) {
         let minValue = admissionMin[i];
         if (i > 0) {
@@ -175,9 +153,9 @@ function calculatePpToWeight(ppValues) {
     return randomWeight
 }
 
- function addSieve() { // Вывод таблиц с результатом рассевов
+ function addSieve() {
     const main = document.querySelector("main");
-    const quantityOfSieve = document.getElementById("quantity").value || 1; // Колличество рассевов
+    const quantityOfSieve = document.getElementById("quantity").value || 1;
 
     const allSieveData = [];
     for (let i = 0; i < quantityOfSieve; i++) {
@@ -188,10 +166,8 @@ function calculatePpToWeight(ppValues) {
         const ppValue = parseFloat((poValues[j] - poValues[j-1]).toFixed(2));
         ppValues.push(ppValue);
     }
-    // Корректируем последнее значение
     ppValues[12] = parseFloat((100 - poValues[11]).toFixed(2));
     
-    // Рассчитываем Вес НА ОСНОВЕ этого ПП
     const weightValues = [];
     for (let j = 0; j < getWeight().length; j++) {
         weightValues.push((ppValues[j] * 100).toFixed(0));
@@ -208,14 +184,12 @@ function calculatePpToWeight(ppValues) {
         const newDiv = document.createElement("div");
         newDiv.className = "randomSieve";
 
-        // Добавляем заголовок с порядковым номером
         const number = document.createElement("h2");
         number.textContent = `Рассев: ${i + 1}`;
         newDiv.append(number);
 
         const table = document.createElement("table");
 
-        // Создание таблицу
         for (let row = 1; row < 5; row++) {
             const tr = document.createElement("tr");
             for (let col = 1; col < (getWeight().length + 1); col++) {
@@ -227,7 +201,6 @@ function calculatePpToWeight(ppValues) {
         }
         newDiv.append(table);
 
-        // Заполнение данными
         const admissionValues = [70, 40, 20, 15, 10, 5, 2.5, 1.25, 0.63, 0.315, 0.16, 0.05, "<"];
         const currentData = allSieveData[i];
 
